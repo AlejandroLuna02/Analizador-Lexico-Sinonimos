@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Diccionario de Sinónimos</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <h1>Diccionario de Sinónimos</h1>
+    <div>
+        <form action="{{ url_for('analyze') }}" method="POST">
+            <label for="code">Ingresa las palabras:</label><br>
+            <textarea name="code" id="code" rows="10" cols="50" required>{{ code if code else '' }}</textarea>
+            <br><br>
+            <button type="submit">Verificar</button>
+        </form>
+    </div>
+    
+    {% if results %}
+    <div>
+        <h2>Resultados</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Cadena de entrada</th>
+                    <th>Cadena resultante</th>
+                    <th>Palabras cambiadas</th>
+                    <th>Números</th>
+                    <th>Símbolos</th>
+                    <th>Línea</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for token in results %}
+                <tr>
+                    <td>{{ token.value }}</td>
+                    <td>{{ token.sinónimo if token.sinónimo else token.value }}</td>
+                    <td>{{ token.sinónimo if token.sinónimo and token.value != token.sinónimo else '' }}</td>
+                    <td>{{ token.dígito }}</td>
+                    <td>{{ token.símbolo }}</td>
+                    <td>{{ token.line }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% endif %}
+</body>
+</html>
